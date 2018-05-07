@@ -91,7 +91,9 @@ func (p *PerfPlot) Plot(file, xlabel, ylabel, title string, logscale bool) {
 	pl.Title.Text = title
 	pl.X.Label.Text = xlabel
 	pl.Y.Label.Text = ylabel
-	pl.X.Tick.Marker = pwr2Ticks{}
+	if logscale {
+		pl.X.Tick.Marker = pwr2Ticks{}
+	}
 	pl.X.Tick.Label.Rotation = -math.Pi / 2
 	pl.X.Tick.Label.Font.Size = vg.Millimeter * 3
 	if logscale {
