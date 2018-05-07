@@ -57,7 +57,7 @@ func (p *PerfPlot) AddMetric(series string, param int64, t time.Duration) {
 	p.series[series] = s
 }
 
-func (p *PerfPlot) Plot(file, xlabel, ylabel, title string) {
+func (p *PerfPlot) Plot(file, xlabel, ylabel, title string, logscale bool) {
 
 	seriesargs := make([]interface{}, 0, len(p.series)*2)
 
@@ -72,7 +72,9 @@ func (p *PerfPlot) Plot(file, xlabel, ylabel, title string) {
 	pl.X.Tick.Marker = pwr2Ticks{}
 	pl.X.Tick.Label.Rotation = -math.Pi / 2
 	pl.X.Tick.Label.Font.Size = vg.Millimeter * 3
-	pl.X.Scale = plot.LogScale{}
+	if logscale {
+		pl.X.Scale = plot.LogScale{}
+	}
 	pl.Legend.Top = true
 	pl.Add(plotter.NewGrid())
 
