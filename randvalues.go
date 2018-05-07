@@ -59,6 +59,19 @@ func fasttransfer(start, end int, transfer func(i int) bool) bool {
 	return !failed
 }
 
+func (rv *RandValues) Clone() *RandValues {
+	newrv := make([]interface{}, len(*rv))
+
+	transfer := func(i int) bool {
+		newrv[i] = (*rv)[i]
+		return true
+	}
+
+	fasttransfer(0, len(*rv), transfer)
+
+	return (*RandValues)(&newrv)
+}
+
 func (rv *RandValues) GetAllInt32() []int32 {
 	vals := rv.GetAll()
 	arr := make([]int32, len(*rv))
