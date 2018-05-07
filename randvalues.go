@@ -191,6 +191,23 @@ func (rv *RandValues) GetAllStrings() []string {
 	return arr
 }
 
+func (rv *RandValues) GetAllBool() []bool {
+	vals := rv.GetAll()
+	arr := make([]bool, len(*rv))
+
+	transfer := func(i int) bool {
+		var ok bool
+		arr[i], ok = vals[i].(bool)
+		return ok
+	}
+
+	if !fasttransfer(0, len(vals), transfer) {
+		return nil
+	}
+
+	return arr
+}
+
 func (rv *RandValues) Shuffle() *RandValues {
 	rand.Shuffle(len(*rv), func(i, j int) {
 		(*rv)[i], (*rv)[j] = (*rv)[j], (*rv)[i]
@@ -269,6 +286,13 @@ func (rv *RandValues) AddSparseFloat32(count int) *RandValues {
 func (rv *RandValues) AddSparseFloat64(count int) *RandValues {
 	for i := 0; i < count; i++ {
 		*rv = append(*rv, rand.Float64())
+	}
+	return rv
+}
+
+func (rv *RandValues) AddIdenticalBool(value bool, count int) *RandValues {
+	for i := 0; i < count; i++ {
+		*rv = append(*rv, value)
 	}
 	return rv
 }
