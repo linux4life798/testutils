@@ -203,6 +203,20 @@ func (rv *RandValues) Clear() *RandValues {
 	return rv
 }
 
+func (rv *RandValues) AddConsecutiveInt32(start int32, count int) *RandValues {
+	for i := start; i < start+int32(count); i++ {
+		*rv = append(*rv, i)
+	}
+	return rv
+}
+
+func (rv *RandValues) AddConsecutiveInt64(start int64, count int) *RandValues {
+	for i := start; i < start+int64(count); i++ {
+		*rv = append(*rv, i)
+	}
+	return rv
+}
+
 func (rv *RandValues) AddSparseInt32(count int) *RandValues {
 	for i := 0; i < count; i++ {
 		*rv = append(*rv, rand.Int31())
