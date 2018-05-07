@@ -57,6 +57,28 @@ func (p *PerfPlot) AddMetric(series string, param int64, t time.Duration) {
 	p.series[series] = s
 }
 
+func (p *PerfPlot) GetMax() time.Duration {
+	var max time.Duration
+	for _, v := range p.series {
+		for i := range v {
+			if v[i].t > max {
+				max = v[i].t
+			}
+		}
+	}
+	return max
+}
+
+func (p *PerfPlot) LimitMax(max time.Duration) {
+	for _, v := range p.series {
+		for i := range v {
+			if v[i].t > max {
+				v[i].t = max
+			}
+		}
+	}
+}
+
 func (p *PerfPlot) Plot(file, xlabel, ylabel, title string, logscale bool) {
 
 	seriesargs := make([]interface{}, 0, len(p.series)*2)
