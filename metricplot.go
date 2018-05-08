@@ -79,7 +79,7 @@ func (p *PerfPlot) LimitMax(max time.Duration) {
 	}
 }
 
-func (p *PerfPlot) Plot(file, xlabel, ylabel, title string, logscale bool) {
+func (p *PerfPlot) Plot(file, xlabel, ylabel, title string, logscale, allticks bool) {
 
 	seriesargs := make([]interface{}, 0, len(p.series)*2)
 
@@ -93,6 +93,9 @@ func (p *PerfPlot) Plot(file, xlabel, ylabel, title string, logscale bool) {
 	pl.Y.Label.Text = ylabel
 	if logscale {
 		pl.X.Tick.Marker = pwr2Ticks{}
+	}
+	if allticks {
+		pl.X.Tick.Marker = allTicks{}
 	}
 	pl.X.Tick.Label.Rotation = -math.Pi / 2
 	pl.X.Tick.Label.Font.Size = vg.Millimeter * 3
@@ -115,6 +118,21 @@ func (p *PerfPlot) Plot(file, xlabel, ylabel, title string, logscale bool) {
 	if err := pl.Save(8*vg.Inch, 6*vg.Inch, file); err != nil {
 		panic(err)
 	}
+}
+
+type allTicks struct{}
+
+func (allTicks) Ticks(min, max float64) []plot.Tick {
+	tks := make([]plot.Tick, 0)
+
+	for i := min; i <= max; i++ {
+		tks = append(tks, plot.Tick{
+			Label: fmt.Sprint(int64(i)),
+			Value: i,
+		})
+	}
+
+	return tks
 }
 
 type pwr2Ticks struct{}
